@@ -22,13 +22,11 @@ struct alignas(32) Vec {
     uint64_t d[MAX_WORDS];
 
     void set_zero() {
-        // #pragma clang loop vectorize(enable) unroll(full)
         #pragma unroll
         for (int i = 0; i < MAX_WORDS; ++i) d[i] = 0;
     }
 
     void assign_xor(const Vec& a, const Vec& b, const Vec& c, const Vec& e) {
-        // #pragma clang loop vectorize(enable) unroll(full)
         #pragma ivdep
         #pragma unroll
         for (int i = 0; i < MAX_WORDS; ++i) {
@@ -54,7 +52,6 @@ struct alignas(32) Vec {
     Vec shift_right() const {
         Vec res;
         uint64_t carry = 0;
-        // #pragma clang loop unroll(full)
         #pragma unroll
         for (int i = MAX_WORDS - 1; i >= 0; --i) {
             res.d[i] = (d[i] >> 1) | carry;
@@ -172,7 +169,7 @@ int main() {
                 std::swap(mat[rank], mat[pivot]);
                 for (int i = 0; i < n; ++i) {
                     if (i != rank && mat[i].test_bit(j)) {
-                        // #pragma clang loop vectorize(enable) unroll(full)
+            
                         #pragma ivdep
                         #pragma unroll
                         for(int k = 0; k < MAX_WORDS; ++k) {
@@ -225,7 +222,7 @@ int main() {
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n; ++j) {
                     if (board[i].test_bit(j)) {
-                        // Старший бит (MSB) отвечает за левый пиксель в байте (формат PBM)
+                        // Старший бит (MSB) = левый пиксель в байте (формат PBM)
                         pbm_data[i * row_bytes + (j / 8)] |= (1 << (7 - (j % 8)));
                     }
                 }
