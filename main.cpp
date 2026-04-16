@@ -169,7 +169,6 @@ int main() {
                 std::swap(mat[rank], mat[pivot]);
                 for (int i = 0; i < n; ++i) {
                     if (i != rank && mat[i].test_bit(j)) {
-            
                         #pragma ivdep
                         #pragma unroll
                         for(int k = 0; k < MAX_WORDS; ++k) {
