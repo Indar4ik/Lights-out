@@ -2,17 +2,16 @@
 #include <bit>
 #include <chrono>
 #include <cstdint>
+#include <format>
+#include <fstream>
 #include <immintrin.h>
 #include <iostream>
 #include <omp.h>
+#include <print>
 #include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <fstream>
-#include <print>
-#include <format>
-
 
 constexpr int MAX_N = 1535;
 constexpr int MAX_WORDS = (MAX_N + 64) / 64; // 24 слова (1536 бит)
@@ -40,7 +39,6 @@ struct alignas(32) Vec {
     Vec shift_left() const {
         Vec res;
         uint64_t carry = 0;
-        // #pragma clang loop unroll(full)
         #pragma unroll
         for (int i = 0; i < MAX_WORDS; ++i) {
             res.d[i] = (d[i] << 1) | carry;
