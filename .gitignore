@@ -7,6 +7,10 @@
 *_clang
 *_gcc
 *_icpx
+*.clang*
+*.icpx*
+*.g++*
+*.optrpt
 compile_flags.txt
 
 build/

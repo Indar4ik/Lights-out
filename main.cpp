@@ -21,13 +21,13 @@ struct alignas(32) Vec {
     uint64_t d[MAX_WORDS];
 
     void set_zero() {
-        #pragma unroll
+        #pragma clang loop unroll(full)
         for (int i = 0; i < MAX_WORDS; ++i) d[i] = 0;
     }
 
     void assign_xor(const Vec& a, const Vec& b, const Vec& c, const Vec& e) {
         #pragma ivdep
-        #pragma unroll
+        #pragma clang loop unroll(full)
         for (int i = 0; i < MAX_WORDS; ++i) {
             d[i] = a.d[i] ^ b.d[i] ^ c.d[i] ^ e.d[i];
         }
@@ -39,7 +39,7 @@ struct alignas(32) Vec {
     Vec shift_left() const {
         Vec res;
         uint64_t carry = 0;
-        #pragma unroll
+        #pragma clang loop unroll(full)
         for (int i = 0; i < MAX_WORDS; ++i) {
             res.d[i] = (d[i] << 1) | carry;
             carry = d[i] >> 63;
@@ -50,7 +50,7 @@ struct alignas(32) Vec {
     Vec shift_right() const {
         Vec res;
         uint64_t carry = 0;
-        #pragma unroll
+        #pragma clang loop unroll(full)
         for (int i = MAX_WORDS - 1; i >= 0; --i) {
             res.d[i] = (d[i] >> 1) | carry;
             carry = d[i] << 63;
@@ -168,7 +168,7 @@ int main() {
                 for (int i = 0; i < n; ++i) {
                     if (i != rank && mat[i].test_bit(j)) {
                         #pragma ivdep
-                        #pragma unroll
+                        #pragma clang loop unroll(full)
                         for(int k = 0; k < MAX_WORDS; ++k) {
                             mat[i].d[k] ^= mat[rank].d[k];
                         }
